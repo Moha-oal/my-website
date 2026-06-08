@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electronics — AURUM LUXE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C96B;
+    --black: #0A0A0A;
+    --white: #FAFAF8;
+    --gray: #8A8A8A;
+    --light: #F2F0EB;
+    --border: #E0DAD0;
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(250,250,248,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 600; letter-spacing: 0.3em;
+    color: var(--black); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--black); text-decoration: none; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-actions { display: flex; align-items: center; gap: 1.5rem; }
+  .cart-btn {
+    background: var(--black); color: var(--white);
+    border: none; cursor: pointer;
+    padding: 0.6rem 1.4rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 500; position: relative; transition: background 0.2s;
+  }
+  .cart-btn:hover { background: var(--gold); }
+  .cart-count {
+    position: absolute; top: -6px; right: -6px;
+    background: var(--gold); color: var(--black);
+    border-radius: 50%; width: 18px; height: 18px;
+    font-size: 0.6rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .cart-count.visible { opacity: 1; }
+
+  /* ── HERO ── */
+  .page-hero {
+    margin-top: 70px; padding: 5rem 3rem 3rem;
+    text-align: center; background: var(--light);
+    border-bottom: 1px solid var(--border);
+  }
+  .page-hero .overline {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 0.8rem;
+  }
+  .page-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300; line-height: 1.1;
+  }
+  .page-hero h1 em { font-style: italic; color: var(--gold); }
+  .page-hero p {
+    margin-top: 1rem; font-size: 0.8rem; color: var(--gray);
+    letter-spacing: 0.05em; max-width: 400px; margin-inline: auto;
+  }
+
+  /* ── FILTERS ── */
+  .filters {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 3rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .filter-tabs { display: flex; gap: 0.5rem; }
+  .filter-tab {
+    padding: 0.45rem 1.2rem;
+    border: 1px solid var(--border);
+    background: none; cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gray); transition: all 0.2s;
+  }
+  .filter-tab.active, .filter-tab:hover {
+    background: var(--black); color: var(--white); border-color: var(--black);
+  }
+  .sort-select {
+    border: 1px solid var(--border); background: none;
+    padding: 0.45rem 1rem; font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.1em; color: var(--gray);
+    cursor: pointer;
+  }
+
+  /* ── PRODUCT GRID ── */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0;
+    border-left: 1px solid var(--border);
+    margin: 0 3rem;
+  }
+  .product-card {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem;
+    transition: background 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-card:hover { background: var(--light); }
+  .product-card .badge {
+    position: absolute; top: 1.5rem; left: 1.5rem;
+    background: var(--black); color: var(--white);
+    font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 0.3rem 0.7rem; font-weight: 500;
+  }
+  .product-card .badge.gold { background: var(--gold); color: var(--black); }
+  .product-img {
+    width: 100%; aspect-ratio: 3/4; object-fit: cover;
+    margin-bottom: 1.5rem; display: block;
+    transition: transform 0.4s ease;
+  }
+  .product-card:hover .product-img { transform: scale(1.02); }
+  .product-category {
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.4rem; font-weight: 500;
+  }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 400; margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  .product-desc {
+    font-size: 0.7rem; color: var(--gray);
+    line-height: 1.6; margin-bottom: 1rem;
+  }
+  .product-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 1rem;
+  }
+  .product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 600;
+  }
+  .add-btn {
+    background: var(--black); color: var(--white);
+    border: none; cursor: pointer;
+    padding: 0.6rem 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    font-weight: 500; transition: background 0.2s;
+  }
+  .add-btn:hover { background: var(--gold); color: var(--black); }
+  .add-btn.added { background: var(--gold); color: var(--black); }
+
+  /* ── CART DRAWER ── */
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-drawer {
+    position: fixed; top: 0; right: -440px; width: 440px; height: 100vh;
+    background: var(--white); z-index: 201;
+    display: flex; flex-direction: column;
+    transition: right 0.3s ease;
+    border-left: 1px solid var(--border);
+  }
+  .cart-drawer.open { right: 0; }
+  .cart-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .cart-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 400; letter-spacing: 0.05em;
+  }
+  .close-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 1.2rem; color: var(--gray);
+    font-family: 'Montserrat', sans-serif;
+    transition: color 0.2s;
+  }
+  .close-btn:hover { color: var(--black); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+  .cart-empty {
+    text-align: center; padding: 3rem 0;
+    font-size: 0.75rem; color: var(--gray); letter-spacing: 0.1em;
+  }
+  .cart-item {
+    display: flex; gap: 1rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .cart-item img {
+    width: 70px; height: 90px; object-fit: cover;
+    flex-shrink: 0;
+  }
+  .cart-item-info { flex: 1; }
+  .cart-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-weight: 400; margin-bottom: 0.2rem;
+  }
+  .cart-item-price {
+    font-size: 0.75rem; color: var(--gold); font-weight: 500;
+  }
+  .cart-item-qty {
+    display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;
+  }
+  .qty-btn {
+    background: none; border: 1px solid var(--border);
+    width: 24px; height: 24px; cursor: pointer;
+    font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .qty-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+  .qty-num { font-size: 0.75rem; min-width: 20px; text-align: center; }
+  .remove-item {
+    background: none; border: none; cursor: pointer;
+    color: var(--gray); font-size: 0.6rem; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-top: 0.5rem; display: block;
+    transition: color 0.2s; font-family: 'Montserrat', sans-serif;
+  }
+  .remove-item:hover { color: #c0392b; }
+  .cart-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .cart-subtotal {
+    display: flex; justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  .cart-subtotal span:first-child {
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray);
+  }
+  .cart-subtotal span:last-child {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600;
+  }
+  .cart-note {
+    font-size: 0.6rem; color: var(--gray); margin-bottom: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+  .checkout-btn {
+    width: 100%; background: var(--black); color: var(--white);
+    border: none; cursor: pointer;
+    padding: 1rem; font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    font-weight: 500; transition: background 0.2s;
+  }
+  .checkout-btn:hover { background: var(--gold); color: var(--black); }
+
+  /* ── CHECKOUT MODAL ── */
+  .checkout-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 2rem 1rem; overflow-y: auto;
+  }
+  .checkout-overlay.open { opacity: 1; pointer-events: all; }
+  .checkout-modal {
+    background: var(--white); width: 100%; max-width: 620px;
+    border-top: 3px solid var(--gold);
+    transform: translateY(-20px);
+    transition: transform 0.3s;
+    margin-top: 2rem;
+  }
+  .checkout-overlay.open .checkout-modal { transform: translateY(0); }
+  .checkout-modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .checkout-modal-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 400;
+  }
+  .checkout-body { padding: 2rem; }
+  .checkout-section-title {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-row.full { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .form-group label {
+    font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gray); font-weight: 500;
+  }
+  .form-group input, .form-group select {
+    border: 1px solid var(--border); padding: 0.75rem 0.8rem;
+    font-family: 'Montserrat', sans-serif; font-size: 0.8rem;
+    background: none; color: var(--black);
+    transition: border-color 0.2s; outline: none;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--gold);
+  }
+  .checkout-summary {
+    background: var(--light); padding: 1.5rem;
+    margin: 1.5rem 0; border: 1px solid var(--border);
+  }
+  .summary-line {
+    display: flex; justify-content: space-between;
+    margin-bottom: 0.6rem; font-size: 0.75rem; color: var(--gray);
+  }
+  .summary-line.total {
+    border-top: 1px solid var(--border); padding-top: 0.8rem;
+    margin-top: 0.8rem; color: var(--black);
+    font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600;
+  }
+  .place-order-btn {
+    width: 100%; background: var(--black); color: var(--white);
+    border: none; cursor: pointer;
+    padding: 1.1rem; font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    font-weight: 500; transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+  .place-order-btn:hover { background: var(--gold); color: var(--black); }
+  .secure-note {
+    text-align: center; margin-top: 0.8rem;
+    font-size: 0.6rem; color: var(--gray); letter-spacing: 0.05em;
+  }
+
+  /* ── SUCCESS ── */
+  .success-screen {
+    display: none; text-align: center; padding: 3rem 2rem;
+  }
+  .success-screen.show { display: block; }
+  .success-icon {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--gold); color: var(--black);
+    font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  .success-screen h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300; margin-bottom: 0.5rem;
+  }
+  .success-screen p { font-size: 0.75rem; color: var(--gray); }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    text-align: center; padding: 3rem;
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+    font-size: 0.65rem; letter-spacing: 0.15em; color: var(--gray);
+    text-transform: uppercase;
+  }
+  .page-footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .products-grid { margin: 0 1rem; }
+    .filters { padding: 1rem 1.5rem; }
+    .cart-drawer { width: 100%; right: -100%; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://my-website-eight-smoky-68.vercel.app/" class="nav-logo">AURUM LUXE</a>
+  <ul class="nav-links">
+    <li><a href="https://my-website-eight-smoky-68.vercel.app/">Home</a></li>
+    <li><a href="#" style="color:var(--gold)">Collection</a></li>
+    <li><a href="https://my-website-eight-smoky-68.vercel.app/#about">About</a></li>
+    <li><a href="https://my-website-eight-smoky-68.vercel.app/#contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="cart-btn" onclick="openCart()">
+      CART
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="overline">Tech Collection</div>
+  <h1>Premium <em>Electronics</em></h1>
+  <p>Curated high-performance technology for those who demand precision, power, and excellence.</p>
+</div>
+
+<!-- FILTERS -->
+<div class="filters">
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterProducts('all', this)">All</button>
+    <button class="filter-tab" onclick="filterProducts('laptops', this)">Laptops</button>
+    <button class="filter-tab" onclick="filterProducts('gpu', this)">GPUs</button>
+    <button class="filter-tab" onclick="filterProducts('monitors', this)">Monitors</button>
+    <button class="filter-tab" onclick="filterProducts('accessories', this)">Accessories</button>
+  </div>
+  <select class="sort-select" onchange="sortProducts(this.value)">
+    <option value="default">Sort: Featured</option>
+    <option value="price-asc">Price: Low to High</option>
+    <option value="price-desc">Price: High to Low</option>
+    <option value="name">Name: A–Z</option>
+  </select>
+</div>
+
+<!-- PRODUCTS GRID -->
+<div class="products-grid" id="productsGrid"></div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <p>© 2026 Aurum Luxe · All Rights Reserved · <a href="https://my-website-eight-smoky-68.vercel.app/">Back to Home</a> · <a href="https://my-website-eight-smoky-68.vercel.app/">Electronics</a></p>
+</div>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">Your cart is empty.</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span id="cartTotal">$0.00</span>
+    </div>
+    <p class="cart-note">Shipping & taxes calculated at checkout · Free worldwide shipping</p>
+    <button class="checkout-btn" onclick="openCheckout()">PROCEED TO CHECKOUT</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <div class="checkout-modal-header">
+      <h2>Secure Checkout</h2>
+      <button class="close-btn" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="checkout-body" id="checkoutBody">
+      <!-- Contact -->
+      <div class="checkout-section-title">Contact Information</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="John" id="firstName">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Doe" id="lastName">
+        </div>
+      </div>
+      <div class="form-row full" style="margin-bottom:1.5rem">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="john@example.com" id="email">
+        </div>
+      </div>
+
+      <!-- Shipping -->
+      <div class="checkout-section-title">Shipping Address</div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Address</label>
+          <input type="text" placeholder="123 Luxury Avenue" id="address">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" placeholder="New York" id="city">
+        </div>
+        <div class="form-group">
+          <label>Postal Code</label>
+          <input type="text" placeholder="10001" id="postal">
+        </div>
+      </div>
+      <div class="form-row full" style="margin-bottom:1.5rem">
+        <div class="form-group">
+          <label>Country</label>
+          <select id="country">
+            <option>United States</option>
+            <option>United Kingdom</option>
+            <option>United Arab Emirates</option>
+            <option>Saudi Arabia</option>
+            <option>Malaysia</option>
+            <option>France</option>
+            <option>Germany</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="checkout-section-title">Payment</div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Card Number</label>
+          <input type="text" placeholder="4242 4242 4242 4242" maxlength="19" id="cardNum" oninput="formatCard(this)">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Expiry Date</label>
+          <input type="text" placeholder="MM / YY" maxlength="7" id="expiry" oninput="formatExpiry(this)">
+        </div>
+        <div class="form-group">
+          <label>CVV</label>
+          <input type="text" placeholder="123" maxlength="4" id="cvv">
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="checkout-summary" id="checkoutSummary"></div>
+
+      <button class="place-order-btn" onclick="placeOrder()">PLACE ORDER — PAY NOW</button>
+      <p class="secure-note">🔒 256-bit SSL Encrypted · Your information is safe</p>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✓</div>
+      <h2>Order Confirmed</h2>
+      <p style="margin-bottom:0.3rem">Thank you for your purchase.</p>
+      <p>A confirmation email has been sent to your inbox.</p>
+      <button class="place-order-btn" style="max-width:200px;margin:2rem auto 0" onclick="closeCheckout(); location.reload()">CONTINUE SHOPPING</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PRODUCTS DATA ──
+// أضف منتجاتك هنا بنفس الصيغة
+const products = [
+  {
+    id: 1, name: 'MacBook Pro 16" M3 Max', category: 'laptops',
+    price: 3499, badge: 'Best Seller', badgeType: 'gold',
+    desc: 'Apple M3 Max chip, 48GB unified memory, 1TB SSD. The ultimate pro laptop for creators and developers.',
+    img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 2, name: 'ASUS ROG Zephyrus G16', category: 'laptops',
+    price: 2199, badge: 'New', badgeType: '',
+    desc: 'Intel Core i9, RTX 4080, 32GB DDR5, 240Hz OLED display. Engineered for elite gaming performance.',
+    img: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 3, name: 'NVIDIA RTX 4090', category: 'gpu',
+    price: 1899, badge: 'Limited', badgeType: '',
+    desc: '24GB GDDR6X, 16,384 CUDA cores. The world\'s most powerful consumer GPU for gaming and AI workloads.',
+    img: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 4, name: 'AMD Radeon RX 7900 XTX', category: 'gpu',
+    price: 999, badge: null, badgeType: '',
+    desc: '24GB GDDR6, 96 compute units. Exceptional 4K performance at a competitive price point.',
+    img: 'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 5, name: 'Samsung Odyssey G9 49"', category: 'monitors',
+    price: 1299, badge: 'Best Seller', badgeType: 'gold',
+    desc: '49" DQHD 240Hz OLED, 0.03ms response time. Immersive ultra-wide curved gaming monitor.',
+    img: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 6, name: 'LG UltraFine 27" 4K', category: 'monitors',
+    price: 699, badge: null, badgeType: '',
+    desc: 'IPS Nano, 99% DCI-P3, USB-C 96W charging. The professional\'s choice for color-accurate work.',
+    img: 'https://images.unsplash.com/photo-1585792180666-f7347c490ee2?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 7, name: 'Keychron Q1 Pro', category: 'accessories',
+    price: 199, badge: 'New', badgeType: '',
+    desc: 'QMK wireless mechanical keyboard, aluminum body, Gateron Jupiter switches. Built for professionals.',
+    img: 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 8, name: 'Logitech MX Master 3S', category: 'accessories',
+    price: 99, badge: null, badgeType: '',
+    desc: '8K DPI sensor, electromagnetic scroll wheel, ergonomic design. The master of productivity mice.',
+    img: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 9, name: 'Sony WH-1000XM5', category: 'accessories',
+    price: 349, badge: 'Exclusive', badgeType: '',
+    desc: 'Industry-leading noise cancellation, 30hr battery, Hi-Res Audio. Silence everything except what matters.',
+    img: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 10, name: 'Dell XPS 15 OLED', category: 'laptops',
+    price: 2499, badge: null, badgeType: '',
+    desc: 'Intel Core i9-13900H, RTX 4070, 3.5K OLED touch display. Where power meets elegance.',
+    img: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 11, name: 'Samsung 990 Pro 2TB', category: 'accessories',
+    price: 179, badge: null, badgeType: '',
+    desc: 'PCIe 4.0 NVMe SSD, 7,450 MB/s read speed. Blazing fast storage for professionals and gamers.',
+    img: 'https://images.unsplash.com/photo-1600348712270-5af9e3590f49?w=600&h=750&fit=crop&q=80'
+  },
+  {
+    id: 12, name: 'ASUS ProArt PA32UCX', category: 'monitors',
+    price: 2999, badge: 'Signature', badgeType: 'gold',
+    desc: '32" 4K Mini LED, 1,152 dimming zones, Calman Verified. The reference monitor for content creators.',
+    img: 'https://images.unsplash.com/photo-1547082299-de196ea013d6?w=600&h=750&fit=crop&q=80'
+  },
+  // ── أضف منتجاتك الجديدة هنا ──
+  // { id: 13, name: 'اسم المنتج', category: 'laptops', price: السعر, badge: null, desc: 'الوصف', img: 'رابط الصورة' },
+];
+
+let cart = [];
+let filtered = [...products];
+
+// ── RENDER PRODUCTS ──
+function renderProducts(list) {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  list.forEach(p => {
+    const inCart = cart.find(c => c.id === p.id);
+    grid.innerHTML += `
+      <div class="product-card" data-category="${p.category}">
+        ${p.badge ? `<div class="badge ${p.badgeType === 'gold' ? 'gold' : ''}">${p.badge}</div>` : ''}
+        <img class="product-img" src="${p.img}" alt="${p.name}" loading="lazy">
+        <div class="product-category">${p.category}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">$${p.price.toLocaleString()}</div>
+          <button class="add-btn ${inCart ? 'added' : ''}" id="btn-${p.id}" onclick="addToCart(${p.id})">
+            ${inCart ? 'ADDED ✓' : 'ADD TO CART'}
+          </button>
+        </div>
+      </div>`;
+  });
+}
+
+function filterProducts(cat, btn) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  filtered = cat === 'all' ? [...products] : products.filter(p => p.category === cat);
+  renderProducts(filtered);
+}
+
+function sortProducts(val) {
+  const list = [...filtered];
+  if (val === 'price-asc') list.sort((a,b) => a.price - b.price);
+  else if (val === 'price-desc') list.sort((a,b) => b.price - a.price);
+  else if (val === 'name') list.sort((a,b) => a.name.localeCompare(b.name));
+  renderProducts(list);
+}
+
+// ── CART ──
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  const existing = cart.find(c => c.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ ...product, qty: 1 });
+  updateCartUI();
+  const btn = document.getElementById('btn-' + id);
+  if (btn) { btn.textContent = 'ADDED ✓'; btn.classList.add('added'); }
+  openCart();
+}
+
+function updateCartUI() {
+  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const count = cart.reduce((sum, i) => sum + i.qty, 0);
+  const countEl = document.getElementById('cartCount');
+  countEl.textContent = count;
+  countEl.classList.toggle('visible', count > 0);
+  document.getElementById('cartTotal').textContent = '$' + total.toLocaleString('en', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+  const itemsEl = document.getElementById('cartItems');
+  if (cart.length === 0) {
+    itemsEl.innerHTML = '<div class="cart-empty">Your cart is empty.</div>';
+    return;
+  }
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <img src="${item.img}" alt="${item.name}">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">$${item.price.toLocaleString()}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id}, +1)">+</button>
+        </div>
+        <button class="remove-item" onclick="removeItem(${item.id})">Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeItem(id);
+  else updateCartUI();
+}
+
+function removeItem(id) {
+  cart = cart.filter(c => c.id !== id);
+  const btn = document.getElementById('btn-' + id);
+  if (btn) { btn.textContent = 'ADD TO CART'; btn.classList.remove('added'); }
+  updateCartUI();
+}
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartDrawer').classList.add('open');
+}
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartDrawer').classList.remove('open');
+}
+
+// ── CHECKOUT ──
+function openCheckout() {
+  if (cart.length === 0) return;
+  closeCart();
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const shipping = 0;
+  const total = subtotal + shipping;
+  document.getElementById('checkoutSummary').innerHTML = `
+    ${cart.map(i => `<div class="summary-line"><span>${i.name} × ${i.qty}</span><span>$${(i.price * i.qty).toLocaleString()}</span></div>`).join('')}
+    <div class="summary-line"><span>Shipping</span><span>Free</span></div>
+    <div class="summary-line total"><span>Total</span><span>$${total.toLocaleString('en', {minimumFractionDigits: 2})}</span></div>`;
+  document.getElementById('checkoutOverlay').classList.add('open');
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutOverlay').classList.remove('open');
+  document.getElementById('checkoutBody').style.display = 'block';
+  document.getElementById('successScreen').classList.remove('show');
+}
+
+function placeOrder() {
+  const fields = ['firstName','lastName','email','address','city','postal','cardNum','expiry','cvv'];
+  for (const f of fields) {
+    if (!document.getElementById(f).value.trim()) {
+      document.getElementById(f).focus();
+      document.getElementById(f).style.borderColor = '#c0392b';
+      setTimeout(() => document.getElementById(f).style.borderColor = '', 2000);
+      return;
+    }
+  }
+  document.getElementById('checkoutBody').style.display = 'none';
+  document.getElementById('successScreen').classList.add('show');
+  cart = [];
+  updateCartUI();
+}
+
+// ── FORMAT HELPERS ──
+function formatCard(el) {
+  let v = el.value.replace(/\D/g, '').substring(0, 16);
+  el.value = v.match(/.{1,4}/g)?.join(' ') || v;
+}
+function formatExpiry(el) {
+  let v = el.value.replace(/\D/g, '').substring(0, 4);
+  if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
+  el.value = v;
+}
+
+// Init
+renderProducts(products);
+</script>
+</body>
+</html>
