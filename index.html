@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURUM LUXE — Crafted for Those Who Demand Extraordinary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #111111;
+  --bg-card: #161616;
+  --gold-primary: #C9A84C;
+  --gold-light: #E8D48B;
+  --gold-glow: rgba(201, 168, 76, 0.3);
+  --text-primary: #F5F0E8;
+  --text-secondary: #8A8580;
+  --text-muted: #4A4540;
+  --border: rgba(201, 168, 76, 0.15);
+  --white: #FFFFFF;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', 'Segoe UI', sans-serif;
+  --font-accent: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== CUSTOM CURSOR ===== */
+.cursor-dot, .cursor-ring {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 99999;
+  border-radius: 50%;
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 8px; height: 8px;
+  background: var(--gold-primary);
+  transition: transform 0.1s ease;
+}
+.cursor-ring {
+  width: 40px; height: 40px;
+  border: 1.5px solid var(--gold-primary);
+  opacity: 0.5;
+  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+}
+.cursor-ring.hovering {
+  width: 60px; height: 60px;
+  opacity: 0.8;
+  border-color: var(--gold-light);
+}
+@media (pointer: coarse) {
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 1.5rem 4%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease;
+}
+.navbar.scrolled {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  padding: 1rem 4%;
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: 0.15em;
+}
+.nav-logo span { color: var(--gold-primary); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--gold-primary);
+  transition: width 0.3s var(--ease-out-expo);
+}
+.nav-links a:hover { color: var(--text-primary); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  padding: 0.65rem 1.8rem;
+  background: var(--gold-primary);
+  color: var(--bg-primary);
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  display: inline-block;
+}
+.nav-cta:hover {
+  background: var(--gold-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--gold-glow);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  z-index: 1002;
+  background: none; border: none; padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 28px; height: 1.5px;
+  background: var(--text-primary);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.hamburger.active span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.97);
+  backdrop-filter: blur(30px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.mobile-menu.active { opacity: 1; pointer-events: all; }
+.mobile-menu a {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  transition: color 0.3s ease;
+}
+.mobile-menu a:hover { color: var(--gold-primary); }
+
+@media (max-width: 900px) {
+  .nav-links, .nav-cta { display: none; }
+  .hamburger { display: flex; }
+}
+
+/* ===== SECTION UTILITIES ===== */
+.section-pad { padding: 8rem 6%; }
+.reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+.section-label {
+  font-family: var(--font-accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+.section-title em {
+  font-style: italic;
+  color: var(--gold-primary);
+}
+
+/* ===== BUTTON STYLES ===== */
+.btn {
+  display: inline-block;
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
+  padding: 1rem 2.5rem;
+  text-decoration: none;
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+}
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.6s ease;
+}
+.btn:hover::before { left: 100%; }
+.btn-gold {
+  background: var(--gold-primary);
+  color: var(--bg-primary);
+}
+.btn-gold:hover {
+  background: var(--gold-light);
+  box-shadow: 0 0 40px var(--gold-glow);
+  transform: translateY(-2px);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.1);
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(201, 168, 76, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(201, 168, 76, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 80%, rgba(17, 17, 17, 0.8) 0%, transparent 70%);
+  animation: meshMove 20s ease-in-out infinite alternate;
+}
+@keyframes meshMove {
+  0% { background-position: 0% 0%, 100% 0%, 50% 100%; }
+  50% { background-position: 30% 20%, 70% 40%, 40% 80%; }
+  100% { background-position: 10% 40%, 90% 10%, 60% 90%; }
+}
+.hero-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  animation: noiseShift 0.5s steps(4) infinite;
+}
+@keyframes noiseShift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(1px, -1px); }
+  75% { transform: translate(-1px, -2px); }
+  100% { transform: translate(2px, 0); }
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+  width: 100%;
+  padding: 0 6%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.hero-text { max-width: 640px; }
+.hero-label {
+  font-family: var(--font-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.4em;
+  color: var(--gold-primary);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.3s forwards;
+}
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.5s forwards;
+}
+.hero-headline strong {
+  font-weight: 600;
+  display: block;
+}
+.hero-headline em {
+  font-style: italic;
+  color: var(--gold-primary);
+  font-weight: 300;
+}
+.hero-rule {
+  width: 60px; height: 1px;
+  background: var(--gold-primary);
+  border: none;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.65s forwards;
+}
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  max-width: 440px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.75s forwards;
+}
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.9s forwards;
+}
+.hero-image-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeUp 1s var(--ease-out-expo) 0.7s forwards;
+}
+.hero-image-glow {
+  position: absolute;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: glowPulse 4s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+  0% { opacity: 0.5; transform: scale(1); }
+  100% { opacity: 0.8; transform: scale(1.15); }
+}
+.hero-image {
+  position: relative;
+  width: 380px;
+  height: 460px;
+  object-fit: cover;
+  transform: rotate(3deg);
+  border: 1px solid var(--border);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  transition: transform 0.6s var(--ease-out-expo);
+}
+.hero-image:hover { transform: rotate(0deg) scale(1.02); }
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 1.2s forwards;
+}
+.scroll-indicator span {
+  font-family: var(--font-accent);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+}
+.scroll-arrow {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold-primary), transparent);
+  position: relative;
+}
+.scroll-arrow::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: -3px;
+  width: 7px; height: 7px;
+  border-right: 1px solid var(--gold-primary);
+  border-bottom: 1px solid var(--gold-primary);
+  transform: rotate(45deg);
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: rotate(45deg) translateY(0); opacity: 1; }
+  50% { transform: rotate(45deg) translateY(6px); opacity: 0.4; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding-top: 8rem;
+  }
+  .hero-text { max-width: 100%; }
+  .hero-sub { max-width: 100%; margin-left: auto; margin-right: auto; }
+  .hero-actions { justify-content: center; }
+  .hero-image-wrap { order: -1; }
+  .hero-image { width: 260px; height: 320px; }
+  .hero-rule { margin-left: auto; margin-right: auto; }
+}
+
+/* ===== BRAND STATEMENT ===== */
+.brand {
+  position: relative;
+  background: var(--bg-secondary);
+  overflow: hidden;
+}
+.brand-quote {
+  position: absolute;
+  top: -2rem; left: -2rem;
+  font-family: var(--font-display);
+  font-size: 20rem;
+  font-weight: 700;
+  color: var(--gold-primary);
+  opacity: 0.04;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.brand-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 5rem;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+}
+.brand-stats {
+  border-right: 1px solid var(--border);
+  padding-right: 4rem;
+}
+.stat-item {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.08);
+}
+.stat-item:last-child { border-bottom: none; }
+.stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  font-weight: 600;
+  color: var(--gold-primary);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.stat-label {
+  font-family: var(--font-accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.brand-story-text {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 2rem;
+}
+.brand-story-text:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: var(--gold-primary);
+  float: left;
+  margin-right: 0.5rem;
+  line-height: 1;
+}
+.brand-signature {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--gold-primary);
+  margin-top: 1.5rem;
+}
+@media (max-width: 900px) {
+  .brand-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .brand-stats {
+    border-right: none;
+    padding-right: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .stat-item { border-bottom: none; text-align: center; }
+}
+
+/* ===== FEATURED PRODUCTS ===== */
+.products { background: var(--bg-primary); }
+.products-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+.product-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.08);
+  overflow: hidden;
+  transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s var(--ease-out-expo), border-color 0.5s ease;
+  position: relative;
+}
+.product-card:hover {
+  transform: translateY(-8px) rotateX(2deg) rotateY(-1deg);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px var(--gold-glow);
+  border-color: var(--gold-primary);
+}
+.product-card-image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+}
+.product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+.product-card:hover .product-card-image img {
+  transform: scale(1.08);
+}
+.product-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.6) 0%, transparent 50%);
+}
+.product-card-body {
+  padding: 1.5rem;
+}
+.product-card-name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+.product-card-price {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-primary);
+  margin-bottom: 1rem;
+}
+.product-card-link {
+  font-family: var(--font-accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s ease, gap 0.3s ease;
+}
+.product-card-link:hover { color: var(--gold-primary); gap: 0.8rem; }
+.product-card-link svg { width: 14px; height: 14px; transition: transform 0.3s ease; }
+.product-card:hover .product-card-link svg { transform: translateX(4px); }
+.products-footer { text-align: center; }
+@media (max-width: 900px) { .products-grid { grid-template-columns: 1fr; max-width: 400px; } }
+@media (min-width: 901px) and (max-width: 1100px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ===== WHY CHOOSE US ===== */
+.values {
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+}
+.values-shape {
+  position: absolute;
+  top: -20%; right: -10%;
+  width: 600px; height: 600px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.03) 0%, transparent 60%);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.values-header { text-align: center; margin-bottom: 4rem; }
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.value-card {
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(201, 168, 76, 0.06);
+  background: rgba(22, 22, 22, 0.5);
+  transition: border-color 0.4s ease, background 0.4s ease;
+  text-align: center;
+}
+.value-card:hover {
+  border-color: var(--border);
+  background: var(--bg-card);
+}
+.value-icon {
+  width: 48px; height: 48px;
+  margin: 0 auto 1.5rem;
+  color: var(--gold-primary);
+}
+.value-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.2; }
+.value-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+}
+.value-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+@media (max-width: 900px) { .values-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .values-grid { grid-template-columns: 1fr; } }
+
+/* ===== TESTIMONIALS ===== */
+.testimonials { background: var(--bg-primary); overflow: hidden; }
+.testimonials-header { text-align: center; margin-bottom: 4rem; }
+.testimonials-track-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+.testimonials-track {
+  display: flex;
+  gap: 1.5rem;
+  animation: scrollTrack 40s linear infinite;
+  width: max-content;
+}
+.testimonials-track:hover { animation-play-state: paused; }
+@keyframes scrollTrack {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.testimonial-card {
+  flex: 0 0 380px;
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.testimonial-stars { display: flex; gap: 3px; }
+.testimonial-stars svg { width: 16px; height: 16px; fill: var(--gold-primary); }
+.testimonial-text {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.7;
+  flex: 1;
+}
+.testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
+.testimonial-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--gold-primary);
+}
+.testimonial-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.testimonial-location {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ===== GALLERY ===== */
+.gallery { background: var(--bg-secondary); }
+.gallery-header { text-align: center; margin-bottom: 3rem; }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out-expo), filter 0.4s ease;
+}
+.gallery-item:hover img {
+  transform: scale(1.1);
+  filter: brightness(0.5);
+}
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-overlay svg { width: 28px; height: 28px; color: var(--white); }
+@media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ===== NEWSLETTER ===== */
+.newsletter {
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+.newsletter-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.newsletter-inner {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+.newsletter-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.newsletter-title em { font-style: italic; color: var(--gold-primary); }
+.newsletter-sub {
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  font-size: 1rem;
+}
+.newsletter-form {
+  display: flex;
+  gap: 0;
+  max-width: 500px;
+  margin: 0 auto 1rem;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.newsletter-form:focus-within {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 30px rgba(201,168,76,0.1);
+}
+.newsletter-form input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+}
+.newsletter-form input::placeholder { color: var(--text-muted); }
+.newsletter-form button {
+  padding: 1rem 2rem;
+  background: var(--gold-primary);
+  border: none;
+  color: var(--bg-primary);
+  font-family: var(--font-accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  white-space: nowrap;
+}
+.newsletter-form button:hover { background: var(--gold-light); }
+.newsletter-trust {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+@media (max-width: 560px) {
+  .newsletter-form { flex-direction: column; }
+  .newsletter-form button { padding: 1rem; }
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid rgba(201, 168, 76, 0.08);
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.06);
+}
+.footer-brand-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.8rem;
+}
+.footer-brand-name span { color: var(--gold-primary); }
+.footer-tagline {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  max-width: 280px;
+}
+.footer-socials { display: flex; gap: 1rem; }
+.footer-socials a {
+  width: 40px; height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(201, 168, 76, 0.1);
+  color: var(--text-secondary);
+  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+  text-decoration: none;
+}
+.footer-socials a:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+  background: rgba(201,168,76,0.05);
+}
+.footer-socials a svg { width: 18px; height: 18px; }
+.footer-col-title {
+  font-family: var(--font-accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 0.8rem; }
+.footer-col ul a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+.footer-col ul a:hover { color: var(--text-primary); }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.footer-made {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+@media (max-width: 900px) {
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+
+/* ===== SELECTION ===== */
+::selection { background: rgba(201, 168, 76, 0.3); color: var(--white); }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--gold-primary); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+  <a href="#" class="nav-logo">AURUM <span>LUXE</span></a>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta">SHOP NOW</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hero" onclick="closeMobile()">Home</a>
+  <a href="#products" onclick="closeMobile()">Products</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#testimonials" onclick="closeMobile()">Testimonials</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+  <a href="#" class="btn btn-gold" style="margin-top:1rem;" onclick="closeMobile()">SHOP NOW</a>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-gradient"></div>
+    <div class="hero-noise"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <p class="hero-label">PREMIUM LIFESTYLE BRAND</p>
+      <h1 class="hero-headline">
+        Crafted for<br>
+        <strong>Those Who Demand</strong>
+        <em>Extraordinary</em>
+      </h1>
+      <hr class="hero-rule">
+      <p class="hero-sub">Curating luxury lifestyle products for the discerning individual. Every piece tells a story of uncompromising quality and timeless elegance.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-gold">SHOP NOW</a>
+        <a href="#about" class="btn btn-ghost">OUR STORY</a>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <div class="hero-image-glow"></div>
+      <img class="hero-image" src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600&h=750&fit=crop&q=80" alt="Luxury watch product" loading="eager">
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>SCROLL</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- Brand Statement / About -->
+<section class="brand section-pad" id="about">
+  <div class="brand-quote">&ldquo;</div>
+  <div class="brand-inner">
+    <div class="brand-stats">
+      <div class="stat-item reveal">
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">HAPPY CUSTOMERS</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">CURATED PRODUCTS</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-number">4.9&#9733;</div>
+        <div class="stat-label">AVERAGE RATING</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">COUNTRIES SERVED</div>
+      </div>
+    </div>
+    <div class="brand-story reveal">
+      <p class="section-label">OUR STORY</p>
+      <h2 class="section-title">A Vision Born from <em>Passion</em></h2>
+      <p class="brand-story-text">Aurum Luxe was born from a singular belief: that luxury should be accessible without compromise. What started as a curated collection of handpicked accessories has evolved into a global destination for those who refuse to settle for the ordinary.</p>
+      <p class="brand-story-text">Every product in our collection undergoes a meticulous selection process — from material sourcing to artisan craftsmanship — ensuring that each piece meets the exacting standards our clientele deserves. We don't follow trends; we set the standard.</p>
+      <p class="brand-signature">— The Aurum Luxe Team</p>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<section class="products section-pad" id="products">
+  <div class="products-header reveal">
+    <p class="section-label">THE COLLECTION</p>
+    <h2 class="section-title">Featured <em>Essentials</em></h2>
+  </div>
+  <div class="products-grid">
+    <div class="product-card reveal">
+      <div class="product-card-image">
+        <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&h=750&fit=crop&q=80" alt="The Elite Watch Case" loading="lazy">
+        <div class="product-card-overlay"></div>
+      </div>
+      <div class="product-card-body">
+        <h3 class="product-card-name">The Elite Watch Case</h3>
+        <p class="product-card-price">$289.00</p>
+        <a href="#" class="product-card-link">
+          VIEW PRODUCT
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-1">
+      <div class="product-card-image">
+        <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?w=600&h=750&fit=crop&q=80" alt="Obsidian Leather Wallet" loading="lazy">
+        <div class="product-card-overlay"></div>
+      </div>
+      <div class="product-card-body">
+        <h3 class="product-card-name">Obsidian Leather Wallet</h3>
+        <p class="product-card-price">$149.00</p>
+        <a href="#" class="product-card-link">
+          VIEW PRODUCT
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-2">
+      <div class="product-card-image">
+        <img src="https://images.unsplash.com/photo-1594035910387-fea081e66b47?w=600&h=750&fit=crop&q=80" alt="Golden Hour Fragrance" loading="lazy">
+        <div class="product-card-overlay"></div>
+      </div>
+      <div class="product-card-body">
+        <h3 class="product-card-name">Golden Hour Fragrance</h3>
+        <p class="product-card-price">$195.00</p>
+        <a href="#" class="product-card-link">
+          VIEW PRODUCT
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="products-footer reveal">
+    <a href="#" class="btn btn-ghost">BROWSE ALL PRODUCTS</a>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="values section-pad">
+  <div class="values-shape"></div>
+  <div class="values-header reveal">
+    <p class="section-label">WHY AURUM LUXE</p>
+    <h2 class="section-title">The <em>Promise</em> We Keep</h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-card reveal">
+      <div class="value-icon">
+        <svg viewBox="0 0 48 48"><path d="M24 4L6 14v20l18 10 18-10V14L24 4z"/><path d="M6 14l18 10m0 0l18-10M24 24v20"/></svg>
+      </div>
+      <h3 class="value-title">Free Global Shipping</h3>
+      <p class="value-desc">Complimentary worldwide delivery on every order, tracked from our studio to your door.</p>
+    </div>
+    <div class="value-card reveal reveal-delay-1">
+      <div class="value-icon">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M16 24l5 5 11-11"/></svg>
+      </div>
+      <h3 class="value-title">Premium Quality</h3>
+      <p class="value-desc">Each piece is handpicked and authenticated to meet our uncompromising quality standards.</p>
+    </div>
+    <div class="value-card reveal reveal-delay-2">
+      <div class="value-icon">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"/><path d="M24 14v10l7 7"/></svg>
+      </div>
+      <h3 class="value-title">24/7 Concierge</h3>
+      <p class="value-desc">Our dedicated concierge team is available around the clock to assist with any inquiry.</p>
+    </div>
+    <div class="value-card reveal reveal-delay-3">
+      <div class="value-icon">
+        <svg viewBox="0 0 48 48"><path d="M14 28l-6 6h32l-6-6"/><path d="M18 28V16a6 6 0 0 1 12 0v12"/></svg>
+      </div>
+      <h3 class="value-title">Easy Returns</h3>
+      <p class="value-desc">Hassle-free 30-day returns with prepaid labels. Your satisfaction is our priority.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials section-pad" id="testimonials">
+  <div class="testimonials-header reveal">
+    <p class="section-label">CLIENT VOICES</p>
+    <h2 class="section-title">What Our Clients <em>Say</em></h2>
+  </div>
+  <div class="testimonials-track-wrap">
+    <div class="testimonials-track" id="testimonialsTrack"></div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="gallery section-pad">
+  <div class="gallery-header reveal">
+    <p class="section-label">@AURUMLUXE</p>
+    <h2 class="section-title">Follow Our <em>Journey</em></h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item reveal">
+      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop&q=80" alt="Lifestyle" loading="lazy">
+      <div class="gallery-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6?w=400&h=400&fit=crop&q=80" alt="Lifestyle" loading="lazy">
+      <div class="gallery-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=400&h=400&fit=crop&q=80" alt="Lifestyle" loading="lazy">
+      <div class="gallery-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item reveal reveal-delay-3">
+      <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop&q=80" alt="Lifestyle" loading="lazy">
+      <div class="gallery-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item reveal reveal-delay-4">
+      <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop&q=80" alt="Lifestyle" loading="lazy">
+      <div class="gallery-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </div>
+    </div>
+    <div class="gallery-item reveal">
+      <img src="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=400&h=400&fit=crop&q=80" alt="Lifestyle" loading="lazy">
+      <div class="gallery-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter section-pad" id="contact">
+  <div class="newsletter-bg"></div>
+  <div class="newsletter-inner reveal">
+    <p class="section-label">STAY CONNECTED</p>
+    <h2 class="newsletter-title">Join the <em>Inner Circle</em></h2>
+    <p class="newsletter-sub">Be the first to discover new arrivals, exclusive offers, and the stories behind our collections.</p>
+    <form class="newsletter-form" onsubmit="event.preventDefault();">
+      <input type="email" placeholder="Enter your email address" required>
+      <button type="submit">SUBSCRIBE</button>
+    </form>
+    <p class="newsletter-trust">No spam. Unsubscribe anytime. We respect your privacy.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer section-pad" style="padding-bottom: 2rem;">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">AURUM <span>LUXE</span></div>
+      <p class="footer-tagline">Crafted for those who demand extraordinary. Premium lifestyle products curated with intention.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1 0-5.78c.27 0 .54.04.8.1v-3.5a6.37 6.37 0 0 0-.8-.05A6.34 6.34 0 0 0 3.15 15.3 6.34 6.34 0 0 0 9.49 21.6a6.34 6.34 0 0 0 6.34-6.34V8.7a8.16 8.16 0 0 0 3.76.93V6.69z"/></svg>
+        </a>
+        <a href="#" aria-label="X / Twitter">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4 class="footer-col-title">QUICK LINKS</h4>
+      <ul>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Best Sellers</a></li>
+        <li><a href="#">Gift Guide</a></li>
+        <li><a href="#">About Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 class="footer-col-title">CUSTOMER SERVICE</h4>
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Returns & Exchanges</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 class="footer-col-title">CONTACT</h4>
+      <ul>
+        <li><a href="mailto:hello@aurumluxe.com">hello@aurumluxe.com</a></li>
+        <li><a href="#">+1 (888) 999-0000</a></li>
+        <li><a href="#">New York, NY</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2026 Aurum Luxe. All rights reserved.</p>
+    <p class="footer-made">Made with &#10084;&#65039; for the extraordinary</p>
+  </div>
+</footer>
+
+<script>
+// ===== CUSTOM CURSOR =====
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  dot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.15;
+  ringY += (mouseY - ringY) * 0.15;
+  ring.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .product-card, .gallery-item').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
+});
+
+// ===== NAVBAR SCROLL =====
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// ===== HAMBURGER =====
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('active');
+  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+});
+function closeMobile() {
+  hamburger.classList.remove('active');
+  mobileMenu.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// ===== SCROLL REVEAL =====
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ===== TESTIMONIALS =====
+const testimonials = [
+  { text: "Aurum Luxe redefined what I expect from an online luxury brand. The attention to detail in both their products and packaging is absolutely extraordinary.", name: "Victoria M.", location: "London, UK", initials: "VM" },
+  { text: "I've ordered from dozens of premium stores online, but nothing compares to the experience Aurum Luxe delivers. Every piece feels like it was curated just for me.", name: "James C.", location: "New York, USA", initials: "JC" },
+  { text: "The Golden Hour Fragrance has become my signature scent. I receive compliments every single time I wear it. Truly a masterpiece.", name: "Sophia L.", location: "Paris, France", initials: "SL" },
+  { text: "From the moment you open the box, you know you're holding something special. The quality speaks for itself, and their customer service is unmatched.", name: "Alexander K.", location: "Dubai, UAE", initials: "AK" },
+  { text: "I gifted the Elite Watch Case to my husband and he was speechless. The craftsmanship is on par with brands charging three times the price.", name: "Isabella R.", location: "Milan, Italy", initials: "IR" },
+  { text: "Aurum Luxe is not just a store — it's an experience. Every interaction, from browsing to unboxing, feels meticulously designed.", name: "Marcus T.", location: "Sydney, Australia", initials: "MT" }
+];
+
+const starSVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+
+function createTestimonialCard(t) {
+  return `<div class="testimonial-card">
+    <div class="testimonial-stars">${starSVG.repeat(5)}</div>
+    <p class="testimonial-text">“${t.text}”</p>
+    <div class="testimonial-author">
+      <div class="testimonial-avatar">${t.initials}</div>
+      <div>
+        <div class="testimonial-name">${t.name}</div>
+        <div class="testimonial-location">${t.location}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+const track = document.getElementById('testimonialsTrack');
+const cardsHTML = testimonials.map(createTestimonialCard).join('');
+track.innerHTML = cardsHTML + cardsHTML;
+
+// ===== PARALLAX HERO =====
+const heroSection = document.querySelector('.hero');
+const heroImage = document.querySelector('.hero-image-wrap');
+document.addEventListener('mousemove', e => {
+  if (window.innerWidth < 900) return;
+  const rect = heroSection.getBoundingClientRect();
+  if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+  const xPercent = (e.clientX / window.innerWidth - 0.5) * 2;
+  const yPercent = (e.clientY / window.innerHeight - 0.5) * 2;
+  heroImage.style.transform = `translate(${xPercent * 15}px, ${yPercent * 10}px)`;
+});
+</script>
+
+</body>
+</html>
